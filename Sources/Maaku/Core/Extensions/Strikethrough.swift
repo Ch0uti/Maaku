@@ -11,24 +11,31 @@ import Foundation
 /// Represents a markdown strikethrough.
 public struct Strikethrough: Inline {
 
+    /// The underlying cmark_node.
+    public let node: CMNode
+
     /// The inline items.
     public let items: [Inline]
 
     /// Creates a Strikethrough.
     ///
+    /// - Parameter node: The underlying cmark_node.
     /// - Returns:
     ///     The initialized Strikethrough.
-    public init() {
+    public init(node: CMNode) {
+        self.node = node
         items = []
     }
 
     /// Creates a Strikethrough with the specified items.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - items: The inline items.
     /// - Returns:
     ///     The initialized Strikethrough.
-    public init(items: [Inline]) {
+    public init(node: CMNode, items: [Inline]) {
+        self.node = node
         self.items = items
     }
 }

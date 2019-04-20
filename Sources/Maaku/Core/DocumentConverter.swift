@@ -419,11 +419,11 @@ extension DocumentConverter: CMParserDelegate {
         }
     }
 
-    public func parserDidStartStrikethrough(parser: CMParser) {
-        nodes.append(Strikethrough())
+    public func parserDidStartStrikethrough(node: CMNode, parser: CMParser) {
+        nodes.append(Strikethrough(node: node))
     }
 
-    public func parserDidEndStrikethrough(parser: CMParser) {
+    public func parserDidEndStrikethrough(node: CMNode, parser: CMParser) {
         var inlineItems: [Inline] = []
 
         while let item = nodes.last as? Inline, !(item is Strikethrough) {
@@ -433,7 +433,7 @@ extension DocumentConverter: CMParserDelegate {
 
         if nodes.last is Strikethrough {
             nodes.removeLast()
-            nodes.append(Strikethrough(items: inlineItems))
+            nodes.append(Strikethrough(node: node, items: inlineItems))
         }
     }
 

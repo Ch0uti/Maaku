@@ -357,14 +357,16 @@ public protocol CMParserDelegate: class {
     /// Sent by the parser object to the delegate when it encounters the start of a strikethrough.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidStartStrikethrough(parser: CMParser)
+    func parserDidStartStrikethrough(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the end of a strikethrough.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidEndStrikethrough(parser: CMParser)
+    func parserDidEndStrikethrough(node: CMNode, parser: CMParser)
 }
 
 /// Represents a parse error.
@@ -587,26 +589,27 @@ public class CMParser {
         }
 
         _ = handleTable(node, nodeName: nodeName, eventType: eventType) ||
-            handleStrikethrough(nodeName, eventType: eventType)
+            handleStrikethrough(node: node, nodeName: nodeName, eventType: eventType)
     }
 
     /// Handles strikethrough extensions for the current node.
     ///
     /// - Parameters:
+    ///     - node: The current node.
     ///     - nodeName: The human readable node name.
     ///     - eventType: The event type.
     /// - Returns:
     ///     true if the node was handled as a strikethrough, false otherwise.
     @discardableResult
-    private func handleStrikethrough(_ nodeName: String, eventType: CMEventType) -> Bool {
+    private func handleStrikethrough(node: CMNode, nodeName: String, eventType: CMEventType) -> Bool {
         guard nodeName == CMExtensionName.strikethrough.rawValue else {
             return false
         }
 
         if eventType == .enter {
-            delegate?.parserDidStartStrikethrough(parser: self)
+            delegate?.parserDidStartStrikethrough(node: node, parser: self)
         } else {
-            delegate?.parserDidEndStrikethrough(parser: self)
+            delegate?.parserDidEndStrikethrough(node: node, parser: self)
         }
 
         return true
