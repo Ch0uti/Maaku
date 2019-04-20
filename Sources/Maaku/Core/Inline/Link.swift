@@ -14,6 +14,9 @@ public struct Link: Inline {
     /// Used for matching links that don't strictly conform to common mark syntax.
     private static let regex = try? NSRegularExpression(pattern: "^\\[\\w+\\]\\(.+\\)$", options: [])
 
+    /// The underlying cmark_node.
+    public let node: CMNode
+
     /// The inline text.
     public let text: [Inline]
 
@@ -35,12 +38,14 @@ public struct Link: Inline {
     /// Creates a Link with the specified values.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - text: The inline text.
     ///     - destination: The link destination.
     ///     - title: The link title.
     /// - Returns:
     ///     The initialized Link.
-    public init(text: [Inline], destination: String?, title: String?) {
+    public init(node: CMNode, text: [Inline], destination: String?, title: String?) {
+        self.node = node
         self.text = text
         self.destination = destination
         self.title = title
@@ -49,25 +54,28 @@ public struct Link: Inline {
     /// Creates a Link with the specified values.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - destination: The link destination.
     ///     - title: The link title.
     /// - Returns:
     ///     The initialized Link.
-    public init(destination: String?, title: String?) {
-        self.init(text: [], destination: destination, title: title)
+    public init(node: CMNode, destination: String?, title: String?) {
+        self.init(node: node, text: [], destination: destination, title: title)
     }
 
     /// Creates a Link with the specified Text.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - text: The Text.
     /// - Returns:
     ///     The initialized Link if a matching link was found, nil otherwise.
-    public init?(text: Text) {
+    public init?(node: CMNode, text: Text) {
         guard let regex = Link.regex else {
             return nil
         }
 
+        self.node = node
         title = nil
 
         let range = NSRange(location: 0, length: text.text.utf16.count)
@@ -82,7 +90,7 @@ public struct Link: Inline {
                 var dest = parts[1]
                 dest.removeLast()
 
-                self.text = [Text(text: linkName)]
+                self.text = [Text(node: node, text: linkName)]
                 destination = dest
             } else {
                 return nil
@@ -95,11 +103,12 @@ public struct Link: Inline {
     /// Creates an updated Link with the specified inline text.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - text: The inline text.
     /// - Returns:
     ///     The updated Link.
-    func with(text: [Inline]) -> Link {
-        return Link(text: text, destination: destination, title: title)
+    func with(node: CMNode, text: [Inline]) -> Link {
+        return Link(node: node, text: text, destination: destination, title: title)
     }
 
 }

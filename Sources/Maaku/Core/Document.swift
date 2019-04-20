@@ -29,6 +29,9 @@ public protocol Node: MarkdownAttributedString {
 /// Represents a markdown document, which is a sequence of markdown block elements.
 public struct Document: MarkdownAttributedString {
 
+    /// The underlying cmark_node.
+    public let node: CMNode
+
     /// The items (block elements).
     public let items: [Block]
 
@@ -50,10 +53,12 @@ public struct Document: MarkdownAttributedString {
     /// Creates a document initialized with the specified items.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - items: The markdown block items.
     /// - Returns:
     ///     The document containing the block items.
-    public init(items: [Block]) {
+    public init(node: CMNode, items: [Block]) {
+        self.node = node
         self.items = items
     }
 
@@ -123,6 +128,7 @@ public struct Document: MarkdownAttributedString {
     public init(text: String, options: CMDocumentOption, extensions: CMExtensionOption) throws {
         let doc = try CMDocument(text: text, options: options, extensions: extensions)
         let converter = DocumentConverter()
+        node = doc.node
         items = (try converter.convert(document: doc)).items
     }
 }

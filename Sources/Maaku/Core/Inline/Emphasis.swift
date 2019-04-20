@@ -11,24 +11,31 @@ import Foundation
 /// Represents a markdown emphasis.
 public struct Emphasis: Inline {
 
+    /// The underlying cmark_node.
+    public let node: CMNode
+    
     /// The inline items.
     public let items: [Inline]
 
     /// Creates a Emphasis.
     ///
+    /// - Parameter node: The underlying cmark_node.
     /// - Returns:
     ///     The initialized Emphasis.
-    public init() {
+    public init(node: CMNode) {
+        self.node = node
         items = []
     }
 
     /// Creates a Emphasis with the specified items.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - items: The inline items.
     /// - Returns:
     ///     The initialized Emphasis.
-    public init(items: [Inline]) {
+    public init(node: CMNode, items: [Inline]) {
+        self.node = node
         self.items = items
     }
 }

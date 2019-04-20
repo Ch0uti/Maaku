@@ -42,7 +42,7 @@ public class DocumentConverter {
             }
         }
 
-        return Document(items: items)
+        return Document(node: document.node, items: items)
     }
 
 }
@@ -50,11 +50,11 @@ public class DocumentConverter {
 /// Extends DocumentConverter as a CMParserDelegate.
 extension DocumentConverter: CMParserDelegate {
 
-    public func parserDidStartDocument(parser: CMParser) {
+    public func parserDidStartDocument(node: CMNode, parser: CMParser) {
 
     }
 
-    public func parserDidEndDocument(parser: CMParser) {
+    public func parserDidEndDocument(node: CMNode, parser: CMParser) {
 
     }
 
@@ -62,9 +62,9 @@ extension DocumentConverter: CMParserDelegate {
 
     }
 
-    public func parser(parser: CMParser, foundText text: String) {
+    public func parser(node: CMNode, parser: CMParser, foundText text: String) {
         if !text.isEmpty {
-            nodes.append(Text(text: text))
+            nodes.append(Text(node: node, text: text))
         }
     }
 
@@ -90,12 +90,12 @@ extension DocumentConverter: CMParserDelegate {
         }
     }
 
-    public func parserDidStartParagraph(parser: CMParser) {
-        let paragraph = Paragraph()
+    public func parserDidStartParagraph(node: CMNode, parser: CMParser) {
+        let paragraph = Paragraph(node: node)
         nodes.append(paragraph)
     }
 
-    public func parserDidEndParagraph(parser: CMParser) {
+    public func parserDidEndParagraph(node: CMNode, parser: CMParser) {
         var inlineItems: [Inline] = []
 
         while let item = nodes.last as? Inline {
@@ -110,7 +110,7 @@ extension DocumentConverter: CMParserDelegate {
             var markdownLink: Link? = inlineItems.first as? Link
 
             if markdownLink == nil, let text = inlineItems.first as? Text {
-                markdownLink = Link(text: text)
+                markdownLink = Link(node: node, text: text)
             }
 
             if let link = markdownLink, let name = link.text.first as? Text, let contents = link.destination {
@@ -124,16 +124,16 @@ extension DocumentConverter: CMParserDelegate {
             if let plug = plugin {
                 nodes.append(plug)
             } else {
-                nodes.append(Paragraph(items: inlineItems))
+                nodes.append(Paragraph(node: node, items: inlineItems))
             }
         }
     }
 
-    public func parserDidStartEmphasis(parser: CMParser) {
-        nodes.append(Emphasis())
+    public func parserDidStartEmphasis(node: CMNode, parser: CMParser) {
+        nodes.append(Emphasis(node: node))
     }
 
-    public func parserDidEndEmphasis(parser: CMParser) {
+    public func parserDidEndEmphasis(node: CMNode, parser: CMParser) {
         var inlineItems: [Inline] = []
 
         while let item = nodes.last as? Inline, !(item is Emphasis) {
@@ -143,15 +143,15 @@ extension DocumentConverter: CMParserDelegate {
 
         if nodes.last is Emphasis {
             nodes.removeLast()
-            nodes.append(Emphasis(items: inlineItems))
+            nodes.append(Emphasis(node: node, items: inlineItems))
         }
     }
 
-    public func parserDidStartStrong(parser: CMParser) {
-        nodes.append(Strong())
+    public func parserDidStartStrong(node: CMNode, parser: CMParser) {
+        nodes.append(Strong(node: node))
     }
 
-    public func parserDidEndStrong(parser: CMParser) {
+    public func parserDidEndStrong(node: CMNode, parser: CMParser) {
         var inlineItems: [Inline] = []
 
         while let item = nodes.last as? Inline, !(item is Strong) {
@@ -161,16 +161,16 @@ extension DocumentConverter: CMParserDelegate {
 
         if nodes.last is Strong {
             nodes.removeLast()
-            nodes.append(Strong(items: inlineItems))
+            nodes.append(Strong(node: node, items: inlineItems))
         }
     }
 
-    public func parser(parser: CMParser, didStartLinkWithDestination destination: String?, title: String?) {
-        let link = Link(destination: destination, title: title)
+    public func parser(node: CMNode, parser: CMParser, didStartLinkWithDestination destination: String?, title: String?) {
+        let link = Link(node: node, destination: destination, title: title)
         nodes.append(link)
     }
 
-    public func parser(parser: CMParser, didEndLinkWithDestination destination: String?, title: String?) {
+    public func parser(node: CMNode, parser: CMParser, didEndLinkWithDestination destination: String?, title: String?) {
         var inlineItems: [Inline] = []
 
         while let item = nodes.last as? Inline, !(item is Link) {
@@ -180,7 +180,7 @@ extension DocumentConverter: CMParserDelegate {
 
         if let link = nodes.last as? Link {
             nodes.removeLast()
-            nodes.append(link.with(text: inlineItems))
+            nodes.append(link.with(node: node, text: inlineItems))
         }
     }
 

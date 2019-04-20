@@ -63,7 +63,7 @@ class LinkSpec: QuickSpec {
                     // swiftlint:disable force_cast
                     let text = paragraph.items[0] as! Text
 
-                    let link = Link(text: text)
+                    let link = Link(node: text.node, text: text)
 
                     expect(link).toNot(beNil())
                     expect(link?.destination)

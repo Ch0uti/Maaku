@@ -37,14 +37,16 @@ public protocol CMParserDelegate: class {
     /// Sent by the parser object to the delegate when it begins parsing a document.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidStartDocument(parser: CMParser)
+    func parserDidStartDocument(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it has successfully completed parsing.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidEndDocument(parser: CMParser)
+    func parserDidEndDocument(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it aborts parsing.
     ///
@@ -55,9 +57,10 @@ public protocol CMParserDelegate: class {
     /// Sent by the parser object to the delegate when it finds text.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
     ///     - text: The text.
-    func parser(parser: CMParser, foundText text: String)
+    func parser(node: CMNode, parser: CMParser, foundText text: String)
 
     /// Sent by the parser object to the delegate when it finds a thematic break (horizontal rule).
     ///
@@ -82,54 +85,62 @@ public protocol CMParserDelegate: class {
     /// Sent by the parser object to the delegate when it encounters the start of a paragraph.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidStartParagraph(parser: CMParser)
+    func parserDidStartParagraph(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the end of a paragraph.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidEndParagraph(parser: CMParser)
+    func parserDidEndParagraph(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the start of an emphasis.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidStartEmphasis(parser: CMParser)
+    func parserDidStartEmphasis(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the end of an emphasis.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidEndEmphasis(parser: CMParser)
+    func parserDidEndEmphasis(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the start of a strong.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidStartStrong(parser: CMParser)
+    func parserDidStartStrong(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the end of a strong.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
-    func parserDidEndStrong(parser: CMParser)
+    func parserDidEndStrong(node: CMNode, parser: CMParser)
 
     /// Sent by the parser object to the delegate when it encounters the start of a link.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
     ///     - destination: The link destination.
     ///     - title: The link title.
-    func parser(parser: CMParser, didStartLinkWithDestination destination: String?, title: String?)
+    func parser(node: CMNode, parser: CMParser, didStartLinkWithDestination destination: String?, title: String?)
 
     /// Sent by the parser object to the delegate when it encounters the end of a link.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
     ///     - destination: The link destination.
     ///     - title: The link title.
-    func parser(parser: CMParser, didEndLinkWithDestination destination: String?, title: String?)
+    func parser(node: CMNode, parser: CMParser, didEndLinkWithDestination destination: String?, title: String?)
 
     /// Sent by the parser object to the delegate when it encounters the start of an image.
     ///
@@ -448,12 +459,12 @@ public class CMParser {
         switch node.type {
         case .document:
             if eventType == .enter {
-                delegate?.parserDidStartDocument(parser: self)
+                delegate?.parserDidStartDocument(node: node, parser: self)
             } else {
-                delegate?.parserDidEndDocument(parser: self)
+                delegate?.parserDidEndDocument(node: node, parser: self)
             }
         case .text:
-            delegate?.parser(parser: self, foundText: node.stringValue ?? "")
+            delegate?.parser(node: node, parser: self, foundText: node.stringValue ?? "")
         case .thematicBreak:
             delegate?.parserFoundThematicBreak(parser: self)
         case .heading:
@@ -464,27 +475,27 @@ public class CMParser {
             }
         case .paragraph:
             if eventType == .enter {
-                delegate?.parserDidStartParagraph(parser: self)
+                delegate?.parserDidStartParagraph(node: node, parser: self)
             } else {
-                delegate?.parserDidEndParagraph(parser: self)
+                delegate?.parserDidEndParagraph(node: node, parser: self)
             }
         case .emphasis:
             if eventType == .enter {
-                delegate?.parserDidStartEmphasis(parser: self)
+                delegate?.parserDidStartEmphasis(node: node, parser: self)
             } else {
-                delegate?.parserDidEndEmphasis(parser: self)
+                delegate?.parserDidEndEmphasis(node: node, parser: self)
             }
         case .strong:
             if eventType == .enter {
-                delegate?.parserDidStartStrong(parser: self)
+                delegate?.parserDidStartStrong(node: node, parser: self)
             } else {
-                delegate?.parserDidEndStrong(parser: self)
+                delegate?.parserDidEndStrong(node: node, parser: self)
             }
         case .link:
             if eventType == .enter {
-                delegate?.parser(parser: self, didStartLinkWithDestination: node.destination, title: node.title)
+                delegate?.parser(node: node, parser: self, didStartLinkWithDestination: node.destination, title: node.title)
             } else {
-                delegate?.parser(parser: self, didEndLinkWithDestination: node.destination, title: node.title)
+                delegate?.parser(node: node, parser: self, didEndLinkWithDestination: node.destination, title: node.title)
             }
         case .image:
             if eventType == .enter {

@@ -17,16 +17,21 @@ import Foundation
 /// Represents markdown text.
 public struct Text: Inline {
 
+    /// The underlying cmark_node.
+    public let node: CMNode
+
     /// The text.
     public let text: String
 
     /// Creates a Text with the specified text.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - text: The text.
     /// - Returns:
     ///     The initialized Text.
-    public init(text: String) {
+    public init(node: CMNode, text: String) {
+        self.node = node
         self.text = text
     }
 
