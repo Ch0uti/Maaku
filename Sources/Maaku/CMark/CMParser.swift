@@ -71,16 +71,18 @@ public protocol CMParserDelegate: class {
     /// Sent by the parser object to the delegate when it encounters the start of a heading.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
     ///     - level: The heading level.
-    func parser(parser: CMParser, didStartHeadingWithLevel level: Int32)
+    func parser(node: CMNode, parser: CMParser, didStartHeadingWithLevel level: Int32)
 
     /// Sent by the parser object to the delegate when it encounters the end of a heading.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - parser: The parser.
     ///     - level: The heading level.
-    func parser(parser: CMParser, didEndHeadingWithLevel level: Int32)
+    func parser(node: CMNode, parser: CMParser, didEndHeadingWithLevel level: Int32)
 
     /// Sent by the parser object to the delegate when it encounters the start of a paragraph.
     ///
@@ -471,9 +473,9 @@ public class CMParser {
             delegate?.parserFoundThematicBreak(parser: self)
         case .heading:
             if eventType == .enter {
-                delegate?.parser(parser: self, didStartHeadingWithLevel: node.headingLevel)
+                delegate?.parser(node: node, parser: self, didStartHeadingWithLevel: node.headingLevel)
             } else {
-                delegate?.parser(parser: self, didEndHeadingWithLevel: node.headingLevel)
+                delegate?.parser(node: node, parser: self, didEndHeadingWithLevel: node.headingLevel)
             }
         case .paragraph:
             if eventType == .enter {

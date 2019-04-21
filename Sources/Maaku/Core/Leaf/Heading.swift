@@ -43,6 +43,9 @@ public enum HeadingLevel: Int {
 /// Represents a markdown heading.
 public struct Heading: LeafBlock {
 
+    /// The underlying cmark_node.
+    public let node: CMNode
+
     /// The heading level.
     public let level: HeadingLevel
 
@@ -52,10 +55,12 @@ public struct Heading: LeafBlock {
     /// Creates a Heading with the specified level.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - level: The level.
     /// - Returns:
     ///     The initialized Heading.
-    public init(level: HeadingLevel) {
+    public init(node: CMNode, level: HeadingLevel) {
+        self.node = node
         self.level = level
         items = []
     }
@@ -63,11 +68,13 @@ public struct Heading: LeafBlock {
     /// Creates a Heading with the specified level and items.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - level: The level.
     ///     - items: The inline items.
     /// - Returns:
     ///     The initialized Heading.
-    public init(level: HeadingLevel, items: [Inline]) {
+    public init(node: CMNode, level: HeadingLevel, items: [Inline]) {
+        self.node = node
         self.level = level
         self.items = items
     }
@@ -75,11 +82,12 @@ public struct Heading: LeafBlock {
     /// Creates an updated Heading with the specified items.
     ///
     /// - Parameters:
+    ///     - node: The underlying cmark_node.
     ///     - items: The inline items.
     /// - Returns:
     ///     The updated Heading.
-    public func with(items: [Inline]) -> Heading {
-        return Heading(level: level, items: items)
+    public func with(node: CMNode, items: [Inline]) -> Heading {
+        return Heading(node: node, level: level, items: items)
     }
 }
 

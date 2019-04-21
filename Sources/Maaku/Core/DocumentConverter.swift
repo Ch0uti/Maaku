@@ -72,11 +72,11 @@ extension DocumentConverter: CMParserDelegate {
         nodes.append(HorizontalRule())
     }
 
-    public func parser(parser: CMParser, didStartHeadingWithLevel level: Int32) {
-        nodes.append(Heading(level: HeadingLevel(rawValue: Int(level)) ?? .unknown))
+    public func parser(node: CMNode, parser: CMParser, didStartHeadingWithLevel level: Int32) {
+        nodes.append(Heading(node: node, level: HeadingLevel(rawValue: Int(level)) ?? .unknown))
     }
 
-    public func parser(parser: CMParser, didEndHeadingWithLevel level: Int32) {
+    public func parser(node: CMNode, parser: CMParser, didEndHeadingWithLevel level: Int32) {
         var inlineItems: [Inline] = []
 
         while let item = nodes.last as? Inline {
@@ -86,7 +86,7 @@ extension DocumentConverter: CMParserDelegate {
 
         if let heading = nodes.last as? Heading {
             nodes.removeLast()
-            nodes.append(heading.with(items: inlineItems))
+            nodes.append(heading.with(node: node, items: inlineItems))
         }
     }
 
