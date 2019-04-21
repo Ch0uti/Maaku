@@ -93,7 +93,7 @@ public struct Heading: LeafBlock {
 
 public extension Heading {
 
-    public func attributedText(style: Style) -> NSAttributedString {
+    func attributedText(style: Style) -> NSAttributedString {
         let attributed = NSMutableAttributedString()
 
         var headingStyle = style
