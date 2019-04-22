@@ -80,6 +80,19 @@ public extension CMNode {
         return wrap(cmarkNode: cmarkNode.pointee.last_child)
     }
 
+    /// The children of this node.
+    var children: [CMNode] {
+        var result: [CMNode] = []
+
+        var child = firstChild
+        while let unwrappedChild = child {
+            result.append(unwrappedChild)
+            child = unwrappedChild.next
+        }
+
+        return result
+    }
+
     /// The node type.
     var type: CMNodeType {
         let cmarkNodeType = cmark_node_get_type(cmarkNode)

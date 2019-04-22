@@ -155,92 +155,96 @@ class StyleSpec: QuickSpec {
             }
 
             context("font(forHeading:)") {
+                // swiftlint:disable:next force_try
+                let dummyNode = (try! Document(text: "# Dummy")).node
                 let style: Style = DefaultStyle()
 
                 it("gets the h1 font") {
-                    let heading = Heading(level: .h1)
+                    let heading = Heading(node: dummyNode, level: .h1)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.h1))
                 }
 
                 it("gets the h2 font") {
-                    let heading = Heading(level: .h2)
+                    let heading = Heading(node: dummyNode, level: .h2)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.h2))
                 }
 
                 it("gets the h3 font") {
-                    let heading = Heading(level: .h3)
+                    let heading = Heading(node: dummyNode, level: .h3)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.h3))
                 }
 
                 it("gets the h4 font") {
-                    let heading = Heading(level: .h4)
+                    let heading = Heading(node: dummyNode, level: .h4)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.h4))
                 }
 
                 it("gets the h5 font") {
-                    let heading = Heading(level: .h5)
+                    let heading = Heading(node: dummyNode, level: .h5)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.h5))
                 }
 
                 it("gets the h6 font") {
-                    let heading = Heading(level: .h6)
+                    let heading = Heading(node: dummyNode, level: .h6)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.h6))
                 }
 
                 it("gets the unknown font") {
-                    let heading = Heading(level: .unknown)
+                    let heading = Heading(node: dummyNode, level: .unknown)
                     let font = style.font(forHeading: heading)
                     expect(font).to(equal(style.fonts.paragraph))
                 }
             }
 
             context("color(forHeading:)") {
+                // swiftlint:disable:next force_try
+                let dummyNode = (try! Document(text: "# Dummy")).node
                 let style: Style = DefaultStyle()
 
                 it("gets the h1 color") {
-                    let heading = Heading(level: .h1)
+                    let heading = Heading(node: dummyNode, level: .h1)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.h1))
                 }
 
                 it("gets the h2 color") {
-                    let heading = Heading(level: .h2)
+                    let heading = Heading(node: dummyNode, level: .h2)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.h2))
                 }
 
                 it("gets the h3 color") {
-                    let heading = Heading(level: .h3)
+                    let heading = Heading(node: dummyNode, level: .h3)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.h3))
                 }
 
                 it("gets the h4 color") {
-                    let heading = Heading(level: .h4)
+                    let heading = Heading(node: dummyNode, level: .h4)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.h4))
                 }
 
                 it("gets the h5 color") {
-                    let heading = Heading(level: .h5)
+                    let heading = Heading(node: dummyNode, level: .h5)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.h5))
                 }
 
                 it("gets the h6 color") {
-                    let heading = Heading(level: .h6)
+                    let heading = Heading(node: dummyNode, level: .h6)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.h6))
                 }
 
                 it("gets the unknown color") {
-                    let heading = Heading(level: .unknown)
+                    let heading = Heading(node: dummyNode, level: .unknown)
                     let color = style.color(forHeading: heading)
                     expect(color).to(equal(style.colors.paragraph))
                 }
