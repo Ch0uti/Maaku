@@ -22,6 +22,9 @@ public enum CMDocumentError: Error {
 /// Represents a cmark document.
 public class CMDocument {
 
+    /// The markdwon text.
+    public let text: String
+
     /// The root node of the document.
     public let node: CMNode
 
@@ -82,6 +85,7 @@ public class CMDocument {
     /// - Returns:
     ///     The initialized and parsed document.
     public init(text: String, options: CMDocumentOption, extensions: CMExtensionOption) throws {
+        self.text = text
         self.options = options
         self.extensions = extensions
         cmark_gfm_core_extensions_ensure_registered()

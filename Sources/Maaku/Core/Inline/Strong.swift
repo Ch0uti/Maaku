@@ -13,7 +13,7 @@ public struct Strong: Inline {
 
     /// The underlying cmark_node.
     public let node: CMNode
-    
+
     /// The inline items.
     public let items: [Inline]
 

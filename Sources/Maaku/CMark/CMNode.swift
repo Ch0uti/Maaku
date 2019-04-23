@@ -93,6 +93,15 @@ public extension CMNode {
         return result
     }
 
+    /// The root node of the document tree.
+    var root: CMNode {
+        var parent = self
+        while let unwrappedParent = parent.parent {
+            parent = unwrappedParent
+        }
+        return parent
+    }
+
     /// The node type.
     var type: CMNodeType {
         let cmarkNodeType = cmark_node_get_type(cmarkNode)
