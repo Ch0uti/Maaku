@@ -183,6 +183,22 @@ public extension CMNode {
         return cmark_node_get_list_tight(cmarkNode) != 0
     }
 
+    /// The list marker offset.
+    var listMarkerOffset: Int32 {
+        guard self.type == .list else {
+            return 0
+        }
+        return cmarkNode.pointee.as.list.marker_offset
+    }
+
+    /// The list padding.
+    var listPadding: Int32 {
+        guard self.type == .list else {
+            return 0
+        }
+        return cmarkNode.pointee.as.list.padding
+    }
+
     /// The URL as a string.
     var destination: String? {
         guard let buffer = cmark_node_get_url(cmarkNode) else {
