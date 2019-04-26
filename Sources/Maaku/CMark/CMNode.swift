@@ -185,17 +185,11 @@ public extension CMNode {
 
     /// The list marker offset.
     var listMarkerOffset: Int32 {
-        guard self.type == .list else {
-            return 0
-        }
         return cmarkNode.pointee.as.list.marker_offset
     }
 
     /// The list padding.
     var listPadding: Int32 {
-        guard self.type == .list else {
-            return 0
-        }
         return cmarkNode.pointee.as.list.padding
     }
 
