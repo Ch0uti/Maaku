@@ -145,6 +145,26 @@ public extension CMNode {
         return String(cString: buffer)
     }
 
+    /// The code fence length.
+    var fencedCodeLength: UInt8 {
+        return cmarkNode.pointee.as.code.fence_length
+    }
+
+    /// The code fence offset.
+    var fencedCodeOffset: UInt8 {
+        return cmarkNode.pointee.as.code.fence_offset
+    }
+
+    /// The fenced code char.
+    var fencedCodeChar: UInt8 {
+        return cmarkNode.pointee.as.code.fence_char
+    }
+
+    /// The fenced code fenced.
+    var fencedCodeFenced: Bool {
+        return cmarkNode.pointee.as.code.fenced == 0 ? false : true
+    }
+
     /// The custom on enter value.
     var customOnEnter: String? {
         guard let buffer = cmark_node_get_on_enter(cmarkNode) else {
